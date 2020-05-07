@@ -1,5 +1,6 @@
 body {
     margin : 100px;
+    padding : 5px;
     font-family:  "TimesNewRoman";
     border: 2px black;
     text-align: center;
@@ -16,4 +17,38 @@ th, td {
     padding: 10px;
 }
 
-tr:hover {background-color: #d1d1d1;}
+tr:hover {background-color: #f0f0f0;}
+
+a:link, a:visited {
+    text-decoration: none;
+    cursor: auto;
+    color: white;
+  }
+
+  button{
+    margin: 3px;
+    border: none;
+    width : 100px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+  
+  button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
+
+  button.delete{
+    background-color: #f44336;
+  }
+
+  button.update{
+    background-color: #4CAF50;
+  }
+  button.logout{
+    background-color: rgb(248, 86, 167);
+    position: relative; top:50px;
+  }

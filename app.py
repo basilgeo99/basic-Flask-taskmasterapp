@@ -5,6 +5,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
+class User:
+    users = [{'user':'tulsi','password':'tulsimasterlord'}]
 class Todo(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     content = db.Column(db.String(200),nullable=False)
@@ -13,8 +15,13 @@ class Todo(db.Model):
     def __repr__(self):
       return '<Task %r>' % self.id
 
-@app.route('/',methods=['POST','GET'])
+
+@app.route('/')
 def index():
+    return redirect('/login/')
+    
+@app.route('/tasks/',methods=['POST','GET'])
+def tasksdef():
     if request.method == 'POST':
         task_content = request.form['content']
         new_task = Todo(content=task_content)
@@ -22,13 +29,13 @@ def index():
         try:
             db.session.add(new_task)
             db.session.commit()
-            return redirect('/')
+            return redirect('/tasks/')
         except :
             return 'There was an issue adding that task'
 
     else:
         tasks = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index.html',tasks=tasks)
+        return render_template('tasks.html',tasks=tasks)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -36,7 +43,7 @@ def delete(id):
     try:
         db.session.delete(task_to_delete)
         db.session.commit()
-        return redirect('/')
+        return redirect('/tasks/')
     except:
         return 'There was a problem deleting that task'
 
@@ -47,11 +54,24 @@ def update(id):
         task.content = request.form['content']
         try:
             db.session.commit()
-            return redirect('/')
+            return redirect('/tasks/')
         except:
             return 'There was an issue updating your task'
     else:
         return render_template('update.html',task=task)
+
+@app.route('/login/',methods=['POST','GET'])
+def login():
+    userid = 'default'
+    password = 'default'
+    if request.method == 'POST':
+        userid = request.form['userid']
+        password = request.form['password']
+    for user in User.users:
+        if(user['user']==userid and user['password']==password):
+            return redirect('/tasks/')
+        else:
+            return render_template('login.html')
 
 
 if __name__ == '__main__':
